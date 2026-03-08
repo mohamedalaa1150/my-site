@@ -2,6 +2,39 @@
   "projects": [
     {
       "id": 1,
+      "title": "First Aid on Tour",
+      "category": "E-learning Development",
+      "thumbnail": "/projects/project_5/thumbnail.jpg",
+      "images": [
+        "/projects/project_5/cover_1.jpg",
+        "/projects/project_5/cover_2.jpg",
+        "/projects/project_5/cover_3.jpg"
+      ],
+      "description": "An interactive e-learning module designed to teach essential first aid skills in everyday situations. The course introduces learners to different types of injuries such as burns, cuts, electrical accidents, and chemical exposure. Through visual scenarios and quick decision-making activities, learners practice identifying risks and applying the correct first aid response.",
+      "features": [
+        "Interactive first aid scenarios.",
+        "Identification of different types of injuries.",
+        "Step-by-step first aid procedures.",
+        "Visual icons and illustrated explanations.",
+        "Quick knowledge checks and mini assessments."
+      ],
+      "tools": [
+        "Articulate Storyline",
+        "Adobe Illustrator",
+        "SCORM 2004",
+        "JavaScript",
+        "AI-generated Voice",
+        "AI-generated Visuals"
+      ],
+      "duration": "2 Days",
+      "team": "2 Members",
+      "client": "Educational Project",
+      "videoUrl": "/projects/project_5/Video.mp4",
+      "scormUrl": "/projects/project_5/story.html",
+      "files": []
+    },
+    {
+      "id": 2,
       "title": "Digital Transformation Governance",
       "category": "E-learning Development",
       "thumbnail": "/projects/project_1/thumbnail.jpg",
@@ -37,7 +70,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": 3,
       "title": "Sidebar Course Navigation",
       "category": "E-learning Development",
       "thumbnail": "/projects/project_2/thumbnail.jpg",
@@ -61,7 +94,7 @@
       "files": []
     },
     {
-      "id": 3,
+      "id": 4,
       "title": "Plants and Their Parts",
       "category": "E-learning Development",
       "thumbnail": "/projects/project_3/thumbnail.jpg",
@@ -97,7 +130,7 @@
       ]
     },
     {
-      "id": 4,
+      "id": 5,
       "title": "Gamified Learning Task with Timed Challenge",
       "category": "E-learning Development",
       "thumbnail": "/projects/project_4/thumbnail.jpg",
@@ -128,7 +161,7 @@
       "files": []
     },
     {
-      "id": 5,
+      "id": 6,
       "title": "Water Cycle",
       "category": "Storyboarding",
       "thumbnail": "/projects/SB/Water cycle.jpg",
@@ -154,7 +187,7 @@
       ]
     },
     {
-      "id": 6,
+      "id": 7,
       "title": "Implementing Local Content Measurement Mechanisms",
       "category": "Storyboarding",
       "thumbnail": "/projects/SB/Implementing local.jpg",
