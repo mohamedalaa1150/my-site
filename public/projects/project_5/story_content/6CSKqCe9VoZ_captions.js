@@ -1,0 +1,1 @@
+window.globalLoadJsAsset('story_content/6CSKqCe9VoZ_captions.js', {"captions":[{"langCode":"en-US","data":"WEBVTT%0D%0A%0D%0ANOTE%0D%0AKind:%20captions%0D%0ASource:%20Articulate%20Closed%20Captions%20Editor%0D%0ASource%20Version:%203.111.36326.0%0D%0A%0D%0A00:00:00.075%20--%3E%2000:00:04.476%0D%0AElectrical%20burn:%20Low%20and%20high%20voltage,%20and%20lightning.%0D%0A%0D%0A"}]})
