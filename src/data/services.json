@@ -3,6 +3,7 @@
     {
       "id": 1,
       "title": "Storyboarding",
+      "featured": true,
       "icon": "FileText",
       "shortDescription": "Detailed visual planning for your learning content",
       "fullDescription": "Professional storyboard creation that serves as the blueprint for your e-learning projects. I develop detailed visual and narrative frameworks that clearly communicate the learning flow, interactions, assessments, and multimedia elements, ensuring all stakeholders are aligned before development begins.",
@@ -25,6 +26,7 @@
     {
       "id": 2,
       "title": "E-learning Development",
+      "featured": true,
       "icon": "Monitor",
       "shortDescription": "Custom interactive learning modules tailored to your needs",
       "fullDescription": "I create comprehensive e-learning solutions from concept to completion. This includes needs analysis, learning objective development, content creation, interactive element design, and final module delivery. Each project is built with responsive design principles and follows accessibility standards to ensure optimal learning experiences across all devices and learner abilities.",

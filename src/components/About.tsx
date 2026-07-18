@@ -3,62 +3,100 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { ArrowRight, User, Award, Target, X, Circle } from "lucide-react";
+import { useGSAP } from "@gsap/react";
 import personalInfo from "../data/personalInfo.json";
+import SectionHeading from "./ui/SectionHeading";
+import Modal from "./ui/Modal";
+import { useStaggerReveal } from "@/hooks/useStaggerReveal";
+import { useMagneticGlow } from "@/hooks/useMagneticGlow";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
+
+export const STATS = [
+  { icon: User, title: "Years\n Experience", value: 3, suffix: "+" },
+  { icon: Award, title: "Projects\n Completed", value: 14, suffix: "+" },
+  { icon: Target, title: "Companies\n Worked", value: 3, suffix: "+" },
+];
 
 const About: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
+  const statsRef = useStaggerReveal<HTMLDivElement>(".stat-card");
+  const knowledgeRef = useStaggerReveal<HTMLDivElement>(".knowledge-item");
+  const programsRef = useStaggerReveal<HTMLDivElement>(".program-item");
+  useMagneticGlow(statsRef);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const items = gsap.utils.toArray<HTMLElement>("[data-stat-value]");
+        items.forEach((el) => {
+          const target = Number(el.dataset.target ?? "0");
+          const counter = { val: 0 };
+          ScrollTrigger.create({
+            trigger: el,
+            start: "top 90%",
+            once: true,
+            onEnter: () => {
+              gsap.to(counter, {
+                val: target,
+                duration: 1.2,
+                ease: "power2.out",
+                onUpdate: () => {
+                  el.textContent = Math.round(counter.val).toString();
+                },
+              });
+            },
+          });
+        });
+      });
+
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.utils.toArray<HTMLElement>("[data-stat-value]").forEach((el) => {
+          el.textContent = el.dataset.target ?? "0";
+        });
+      });
+
+      return () => mm.revert();
+    },
+    { scope: statsRef }
+  );
+
   return (
     <>
-      <section id="about" className="section-padding bg-secondary">
+      <section className="section-padding relative">
         <div className="container-custom">
-          <div className="text-center mb-8 lg:mb-16">
-            <h2 className="text-responsive-lg font-bold mb-3 lg:mb-4">
-              About <span className="gradient-text">Me</span>
-            </h2>
-            <p className="text-sm sm:text-base lg:text-lg text-secondary max-w-2xl mx-auto">
-              Who am I
-            </p>
-          </div>
+          <SectionHeading
+            eyebrow="Who I Am"
+            title="About"
+            highlight="Me"
+            subtitle="A little more about how I approach instructional design"
+          />
 
-          <div className="grid lg:grid-cols-[2fr_1fr_1fr] gap-8 lg:gap-12 items-start">
-            {/* Left Content */}
-            <div className="space-y-4 lg:space-y-6 animate-fade-in-left">
-              <div className="space-y-3 lg:space-y-4">
-                <h3 className="text-xl lg:text-2xl font-bold text-white">
+          <div className="bento-grid">
+            {/* Bio cell */}
+            <div className="col-span-1 sm:col-span-4 lg:col-span-6 xl:col-span-12 glass-card violet-card space-y-5 lg:p-10">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl overflow-hidden border border-white/20 flex-shrink-0 rotate-[-3deg]">
+                  <Image
+                    src="/img/hero.jpg"
+                    alt={personalInfo.name}
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3 className="font-display text-2xl lg:text-4xl leading-tight font-semibold text-white">
                   Transforming Learning Through Innovation
                 </h3>
-                <p className="text-sm sm:text-base lg:text-lg text-secondary leading-relaxed">
-                  {personalInfo.about.summary}
-                </p>
               </div>
-
-              <div className="grid grid-cols-3 gap-3 lg:gap-6">
-                {[
-                  { icon: User, title: `Years\n Experience`, value: "03+" },
-                  { icon: Award, title: "Projects\n Completed", value: "14+ " },
-                  { icon: Target, title: "Companies\n Worked", value: "03+" },
-                ].map((stat, index) => (
-                  <div key={index} className="text-center p-3 lg:p-4 card">
-                    <stat.icon
-                      size={24}
-                      className="text-primary mx-auto mb-2 lg:mb-3"
-                    />
-                    <div className="text-lg lg:text-2xl font-bold text-white">
-                      {stat.value}
-                    </div>
-                    <div className="text-xs lg:text-sm text-secondary">
-                      {stat.title.split("\n").map((line, i) => (
-                        <div key={i}>{line}</div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
+              <p className="max-w-3xl text-sm sm:text-base lg:text-lg text-white/75 leading-relaxed">
+                {personalInfo.about.summary}
+              </p>
               <button
                 onClick={() => setShowModal(true)}
-                className="btn-primary group w-full sm:w-auto "
+                className="btn-gold group w-full sm:w-auto"
               >
                 <span>Know More</span>
                 <ArrowRight
@@ -68,38 +106,54 @@ const About: React.FC = () => {
               </button>
             </div>
 
-            {/* Right Content - Skills */}
-            <div className="space-y-4 lg:space-y-6 animate-fade-in-right text-center lg:text-left lg:ml-8">
-              <h3 className="text-xl lg:text-2xl font-bold text-white">
+            {/* Stat cells — `contents` so each stat becomes its own bento cell */}
+            <div ref={statsRef} className="contents">
+              {STATS.map((stat, index) => (
+                <div
+                  key={index}
+                  className="stat-card col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-4 glass-card min-h-44 flex flex-col items-start justify-between"
+                >
+                  <span className="icon-chip"><stat.icon size={20} /></span>
+                  <div className="font-display text-4xl lg:text-5xl font-semibold text-ink">
+                    <span data-stat-value data-target={stat.value}>
+                      0
+                    </span>
+                    <span className="text-gold">{stat.suffix}</span>
+                  </div>
+                  <div className="text-xs font-bold uppercase tracking-[0.12em] text-ink-muted">{stat.title.split("\n").join(" ")}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Knowledge cell */}
+            <div className="col-span-1 sm:col-span-4 lg:col-span-3 xl:col-span-6 glass-card space-y-5 lg:p-8">
+              <h3 className="font-display text-xl lg:text-2xl font-semibold text-ink">
                 Knowledge
               </h3>
-              <div className="space-y-3 lg:space-y-4">
+              <div ref={knowledgeRef} className="flex flex-wrap gap-2.5">
                 {personalInfo.about.knowledge.map((knowledge, index) => (
-                  <div key={index} className="space-y-1 lg:space-y-2 ">
-                    <div className="flex lg:justify-between items-center">
-                      <span className="text-sm lg:text-base text-secondary font-medium flex items-center gap-2 ml-8 lg:ml-0">
-                        <Circle color="#CE8A7F" size={9} absoluteStrokeWidth />
-                        {knowledge}
-                      </span>
-                    </div>
+                  <div key={index} className="knowledge-item rounded-full border border-hairline/10 bg-void/20 px-3 py-2">
+                    <span className="text-sm text-ink-muted font-semibold flex items-center gap-2">
+                      <Circle className="fill-gold text-gold" size={7} absoluteStrokeWidth />
+                      {knowledge}
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="space-y-4 lg:space-y-6 animate-fade-in-right text-center lg:text-left lg:ml-8">
-              <h3 className="text-xl lg:text-2xl font-bold text-white">
+            {/* Programs & Tools cell */}
+            <div className="col-span-1 sm:col-span-4 lg:col-span-3 xl:col-span-6 glass-card space-y-5 lg:p-8">
+              <h3 className="font-display text-xl lg:text-2xl font-semibold text-ink">
                 Programs & Tools
               </h3>
-              <div className="space-y-3 lg:space-y-4">
+              <div ref={programsRef} className="flex flex-wrap gap-2.5">
                 {personalInfo.about.programs.map((program, index) => (
-                  <div key={index} className="space-y-1 lg:space-y-2 ">
-                    <div className="flex lg:justify-between items-center">
-                      <span className="text-sm lg:text-base text-secondary font-medium flex items-center gap-2 ml-8 lg:ml-0">
-                        <Circle color="#CE8A7F" size={9} absoluteStrokeWidth />
-                        {program}
-                      </span>
-                    </div>
+                  <div key={index} className="program-item rounded-full border border-hairline/10 bg-void/20 px-3 py-2">
+                    <span className="text-sm text-ink-muted font-semibold flex items-center gap-2">
+                      <Circle className="fill-teal text-teal" size={7} absoluteStrokeWidth />
+                      {program}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -110,63 +164,61 @@ const About: React.FC = () => {
 
       {/* About Modal */}
       {showModal && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-4 lg:p-6 border-b border-custom">
-              <h3 className="text-lg lg:text-2xl font-bold text-white">
-                About Mohamed Alaa
-              </h3>
-              <button
-                onClick={() => setShowModal(false)}
-                className="text-secondary hover:text-white transition-colors duration-200"
-              >
-                <X size={20} />
-              </button>
+        <Modal onClose={() => setShowModal(false)}>
+          <div className="flex items-center justify-between p-4 lg:p-6 border-b border-hairline/15">
+            <h3 className="font-display text-lg lg:text-2xl font-semibold text-ink">
+              About Mohamed Alaa
+            </h3>
+            <button
+              onClick={() => setShowModal(false)}
+              className="text-ink-muted hover:text-ink transition-colors duration-200"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          <div className="p-4 lg:p-6 space-y-4 lg:space-y-6">
+            <div className="w-24 h-24 lg:w-32 lg:h-32 mx-auto rounded-full overflow-hidden border-3 lg:border-4 border-gold">
+              <Image
+                src="/img/hero.jpg"
+                alt="Mohamed Alaa"
+                width={128}
+                height={128}
+                className="w-full h-full object-cover"
+                priority
+              />
             </div>
-            <div className="p-4 lg:p-6 space-y-4 lg:space-y-6">
-              <div className="w-24 h-24 lg:w-32 lg:h-32 mx-auto rounded-full overflow-hidden border-3 lg:border-4 border-primary">
-                <Image
-                  src="/img/hero.jpg" // ضع الصورة داخل public/img/hero.jpg
-                  alt="Mohamed Alaa"
-                  width={128}
-                  height={128}
-                  className="w-full h-full object-cover"
-                  priority
-                />
-              </div>
-              <div className="text-center">
-                <h4 className="text-lg lg:text-xl font-bold text-white mb-1 lg:mb-2">
-                  {personalInfo.name}
-                </h4>
-                <p className="text-sm lg:text-base text-primary font-medium">
-                  {personalInfo.title}
-                </p>
-              </div>
-              <div className="space-y-3 lg:space-y-4 text-sm lg:text-base text-secondary leading-relaxed">
-                {personalInfo.about.fullBio
-                  .split("\n")
-                  .map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
-              </div>
-              <div className="pt-3 lg:pt-4 border-t border-custom">
-                <h5 className="text-base lg:text-lg font-bold text-white mb-2 lg:mb-3">
-                  Expertise Areas
-                </h5>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {personalInfo.about.knowledge.map((knowledge, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <span className="text-xs lg:text-sm text-secondary">
-                        {knowledge}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+            <div className="text-center">
+              <h4 className="text-lg lg:text-xl font-bold text-ink mb-1 lg:mb-2">
+                {personalInfo.name}
+              </h4>
+              <p className="text-sm lg:text-base text-gold font-medium">
+                {personalInfo.title}
+              </p>
+            </div>
+            <div className="space-y-3 lg:space-y-4 text-sm lg:text-base text-ink-muted leading-relaxed">
+              {personalInfo.about.fullBio
+                .split("\n")
+                .map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+            </div>
+            <div className="pt-3 lg:pt-4 border-t border-hairline/15">
+              <h5 className="text-base lg:text-lg font-bold text-ink mb-2 lg:mb-3">
+                Expertise Areas
+              </h5>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {personalInfo.about.knowledge.map((knowledge, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-gold rounded-full"></div>
+                    <span className="text-xs lg:text-sm text-ink-muted">
+                      {knowledge}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </>
   );

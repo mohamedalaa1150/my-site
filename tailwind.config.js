@@ -6,12 +6,27 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#d18b80",
-        secondary: "#676767",
-        borderc: "#373737",
+        void: "rgb(var(--bg-void) / <alpha-value>)",
+        surface: "rgb(var(--bg-surface) / <alpha-value>)",
+        footer: "rgb(var(--bg-footer) / <alpha-value>)",
+        gold: {
+          DEFAULT: "rgb(var(--gold) / <alpha-value>)",
+          light: "rgb(var(--gold-light) / <alpha-value>)",
+          dark: "rgb(var(--gold-dark) / <alpha-value>)",
+        },
+        teal: "rgb(var(--teal) / <alpha-value>)",
+        ink: {
+          DEFAULT: "rgb(var(--ink) / <alpha-value>)",
+          muted: "rgb(var(--ink-muted) / <alpha-value>)",
+          faint: "rgb(var(--ink-faint) / <alpha-value>)",
+        },
+        hairline: "rgb(var(--border-hairline) / <alpha-value>)",
       },
       borderWidth: { 3: "3px" },
-      opacity: { 15: "0.15" },
+      fontFamily: {
+        display: ["var(--font-display)"],
+        body: ["var(--font-body)"],
+      },
     },
   },
   plugins: [],

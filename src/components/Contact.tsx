@@ -14,6 +14,10 @@ import {
 
 import personalInfo from "../data/personalInfo.json";
 import { downloadCV } from "./downloadCV";
+import SectionHeading from "./ui/SectionHeading";
+import { useStaggerReveal } from "@/hooks/useStaggerReveal";
+import { useMagneticGlow } from "@/hooks/useMagneticGlow";
+import { gsap } from "@/lib/gsap";
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +28,28 @@ const Contact: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const infoRef = useStaggerReveal<HTMLDivElement>(".contact-item");
+  useMagneticGlow(infoRef);
+  const formRef = useStaggerReveal<HTMLFormElement>(".form-field");
+
+  const handleIconEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    gsap.to(e.currentTarget, {
+      scale: 1.15,
+      duration: 0.3,
+      ease: "power2.out",
+      boxShadow: "0 0 24px rgb(var(--gold) / 0.45)",
+    });
+  };
+
+  const handleIconLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    gsap.to(e.currentTarget, {
+      scale: 1,
+      duration: 0.3,
+      ease: "power2.out",
+      boxShadow: "0 0 0px rgb(var(--gold) / 0)",
+    });
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -33,85 +59,69 @@ const Contact: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // TODO: بدلاً من المحاكاة تقدر تبعت على Route:
-    // POST /api/contact (app/api/contact/route.ts)
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    console.log("Form submitted:", formData);
-    alert("Thank you for your message! I'll get back to you soon.");
-
-    setFormData({ name: "", email: "", message: "" });
-    setIsSubmitting(false);
+    const subject = encodeURIComponent(`Portfolio enquiry from ${formData.name}`);
+    const body = encodeURIComponent(
+      `${formData.message}\n\nFrom: ${formData.name}\nEmail: ${formData.email}`
+    );
+    window.location.href = `mailto:${personalInfo.contact.email}?subject=${subject}&body=${body}`;
+    window.setTimeout(() => setIsSubmitting(false), 600);
   };
 
   return (
-    <section id="contact" className="py-20 bg-primary">
+    <section className="section-padding relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Get In <span className="gradient-text">Touch</span>
-          </h2>
-          <p className="text-lg text-secondary max-w-2xl mx-auto">
-            {
-              "Ready to start your next e-learning project? Let's discuss how I can help you achieve your goals."
-            }
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Let's Talk"
+          title="Get In"
+          highlight="Touch"
+          subtitle="Ready to start your next e-learning project? Let's discuss how I can help you achieve your goals."
+        />
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Info */}
-          <div className="space-y-8 animate-fade-in-left">
+        <div className="bento-grid">
+          {/* Info + Socials cell */}
+          <div className="col-span-1 sm:col-span-4 lg:col-span-4 xl:col-span-7 glass-card violet-card space-y-7 lg:p-9">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-6">
+              <h3 className="font-display text-3xl sm:text-4xl font-semibold text-white mb-3">
                 {"Let's Connect"}
               </h3>
-              <p className="text-secondary leading-relaxed mb-8">
+              <p className="text-white/75 leading-relaxed">
                 {
                   "I'm always interested in discussing new opportunities and challenges. Whether you have a project in mind or just want to say hello, feel free to reach out."
                 }
               </p>
             </div>
 
-            {/* Contact Details */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4 p-4 card hover:border-primary">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                  <Mail size={20} className="text-primary" />
-                </div>
+            <div ref={infoRef} className="space-y-4">
+              <a href={`mailto:${personalInfo.contact.email}`} className="contact-item flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 transition-colors hover:bg-white/10">
+                <span className="icon-chip bg-white/10 border-white/10 text-white"><Mail size={20} /></span>
                 <div>
-                  <h4 className="font-medium text-white">Email</h4>
-                  <p className="text-secondary">{personalInfo.contact.email}</p>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-white/55">Email</h4>
+                  <p className="break-all text-sm font-semibold text-white sm:text-base">{personalInfo.contact.email}</p>
                 </div>
-              </div>
+              </a>
 
-              <div className="flex items-center space-x-4 p-4 card hover:border-primary">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                  <Phone size={20} className="text-primary" />
-                </div>
+              <a href={`tel:${personalInfo.contact.phone.replace(/\s/g, "")}`} className="contact-item flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 transition-colors hover:bg-white/10">
+                <span className="icon-chip bg-white/10 border-white/10 text-white"><Phone size={20} /></span>
                 <div>
-                  <h4 className="font-medium text-white">Phone</h4>
-                  <p className="text-secondary">{personalInfo.contact.phone}</p>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-white/55">Phone</h4>
+                  <p className="font-semibold text-white">{personalInfo.contact.phone}</p>
                 </div>
-              </div>
+              </a>
 
-              <div className="flex items-center space-x-4 p-4 card hover:border-primary">
-                <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                  <MapPin size={20} className="text-primary" />
-                </div>
+              <div className="contact-item flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                <span className="icon-chip bg-white/10 border-white/10 text-white"><MapPin size={20} /></span>
                 <div>
-                  <h4 className="font-medium text-white">Location</h4>
-                  <p className="text-secondary">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-white/55">Location</h4>
+                  <p className="font-semibold text-white">
                     {personalInfo.contact.location}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Social Links */}
             <div>
               <h4 className="font-bold text-white mb-4">Follow Me</h4>
               <div className="flex space-x-4">
@@ -119,50 +129,69 @@ const Contact: React.FC = () => {
                   href={personalInfo.contact.social.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-all duration-300 animate-pulse-hover"
+                  onMouseEnter={handleIconEnter}
+                  onMouseLeave={handleIconLeave}
+                  className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center"
                 >
-                  <Linkedin size={20} className="text-primary" />
+                  <Linkedin size={20} className="text-white" />
                 </a>
                 <a
                   href={personalInfo.contact.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-all duration-300 animate-pulse-hover"
+                  onMouseEnter={handleIconEnter}
+                  onMouseLeave={handleIconLeave}
+                  className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center"
                 >
-                  <Facebook size={20} className="text-primary" />
+                  <Facebook size={20} className="text-white" />
                 </a>
                 <a
                   href={personalInfo.contact.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center hover:bg-primary/30 transition-all duration-300 animate-pulse-hover"
+                  onMouseEnter={handleIconEnter}
+                  onMouseLeave={handleIconLeave}
+                  className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center"
                 >
-                  <Instagram size={20} className="text-primary" />
+                  <Instagram size={20} className="text-white" />
                 </a>
               </div>
             </div>
+          </div>
 
-            {/* CV Download */}
+          {/* CV / CTA cell */}
+          <div className="col-span-1 sm:col-span-4 lg:col-span-2 xl:col-span-5 glass-card signal-card flex flex-col justify-between items-start space-y-4 lg:p-9">
+            <Download size={28} className="text-white" />
+            <h3 className="font-display text-3xl font-semibold text-ink">
+              Prefer a quick read?
+            </h3>
+            <p className="text-ink-muted">
+              Grab my CV for a full rundown of my experience and skills.
+            </p>
             <button
               onClick={downloadCV}
-              className="btn-primary flex items-center space-x-2 w-full sm:w-auto"
+              className="btn-gold flex items-center space-x-2 w-full sm:w-auto"
             >
               <Download size={18} />
               <span>Download My CV</span>
             </button>
           </div>
 
-          {/* Contact Form */}
-          <div className="animate-fade-in-right">
-            <form onSubmit={handleSubmit} className="card space-y-6">
-              <h3 className="text-2xl font-bold text-white mb-6">
-                Send Me a Message
-              </h3>
+          {/* Contact Form cell */}
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="col-span-1 sm:col-span-4 lg:col-span-6 xl:col-span-12 glass-card space-y-6"
+          >
+            <h3 className="form-field font-display text-2xl font-semibold text-ink mb-6">
+              Send Me a Message
+            </h3>
 
-              <div>
+            <div className="grid sm:grid-cols-2 gap-6">
+              <div className="form-field">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-white mb-2"
+                  className="block text-sm font-medium text-ink mb-2"
                 >
                   Full Name *
                 </label>
@@ -173,15 +202,15 @@ const Contact: React.FC = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-primary border border-custom rounded-lg focus:border-primary focus:outline-none text-white placeholder-gray-400"
+                  className="input-glass"
                   placeholder="Enter your full name"
                 />
               </div>
 
-              <div>
+              <div className="form-field">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-white mb-2"
+                  className="block text-sm font-medium text-ink mb-2"
                 >
                   Email Address *
                 </label>
@@ -192,49 +221,49 @@ const Contact: React.FC = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-primary border border-custom rounded-lg focus:border-primary focus:outline-none text-white placeholder-gray-400"
+                  className="input-glass"
                   placeholder="Enter your email address"
                 />
               </div>
+            </div>
 
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-white mb-2"
-                >
-                  Message *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={6}
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-primary border border-custom rounded-lg focus:border-primary focus:outline-none text-white placeholder-gray-400 resize-none"
-                  placeholder="Tell me about your project or just say hello..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="btn-primary w-full flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            <div className="form-field">
+              <label
+                htmlFor="message"
+                className="block text-sm font-medium text-ink mb-2"
               >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Sending...</span>
-                  </>
-                ) : (
-                  <>
-                    <Send size={18} />
-                    <span>Send Message</span>
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
+                Message *
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                value={formData.message}
+                onChange={handleChange}
+                required
+                className="input-glass resize-none"
+                placeholder="Tell me about your project or just say hello..."
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="form-field btn-gold w-full sm:w-auto flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-[rgb(var(--btn-gold-ink))] border-t-transparent rounded-full animate-spin" />
+                  <span>Opening email...</span>
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  <span>Send Message</span>
+                </>
+              )}
+            </button>
+          </form>
         </div>
       </div>
     </section>

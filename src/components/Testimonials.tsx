@@ -4,12 +4,18 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import testimonials from "../data/testimonials.json";
+import SectionHeading from "./ui/SectionHeading";
+import { useStaggerReveal } from "@/hooks/useStaggerReveal";
+import { useMagneticGlow } from "@/hooks/useMagneticGlow";
 
 type Testimonial = (typeof testimonials.testimonials)[number];
 
 const Testimonials: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  const gridRef = useStaggerReveal<HTMLDivElement>(".testimonial-tile");
+  useMagneticGlow(gridRef);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -42,24 +48,22 @@ const Testimonials: React.FC = () => {
     testimonials.testimonials[currentIndex];
 
   return (
-    <section id="testimonials" className="py-20 bg-secondary">
+    <section id="testimonials" className="section-padding relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Client <span className="gradient-text">Testimonials</span>
-          </h2>
-          <p className="text-lg text-secondary max-w-2xl mx-auto">
-            What my clients say about working with me
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Kind Words"
+          title="Client"
+          highlight="Testimonials"
+          subtitle="What my clients say about working with me"
+        />
 
         <div className="max-w-4xl mx-auto">
           {/* Main Testimonial Card */}
-          <div className="relative card text-center p-8 sm:p-12 animate-fade-in-up">
-            <Quote size={48} className="text-primary opacity-20 mx-auto mb-6" />
+          <div className="relative glass-card text-center p-8 sm:p-12">
+            <Quote size={48} className="text-gold opacity-30 mx-auto mb-6" />
 
             <div className="mb-8">
-              <p className="text-lg sm:text-xl text-secondary leading-relaxed italic">
+              <p className="text-lg sm:text-xl text-ink-muted leading-relaxed italic">
                 {'"' + currentTestimonial.text + '"'}
               </p>
             </div>
@@ -70,7 +74,7 @@ const Testimonials: React.FC = () => {
                 <Star
                   key={i}
                   size={20}
-                  className="text-yellow-400 fill-current"
+                  className="text-gold fill-current"
                 />
               ))}
             </div>
@@ -82,16 +86,16 @@ const Testimonials: React.FC = () => {
                 alt={currentTestimonial.name}
                 width={64}
                 height={64}
-                className="rounded-full border-2 border-primary"
+                className="rounded-full border-2 border-gold"
               />
               <div className="text-left">
-                <h4 className="text-lg font-bold text-white">
+                <h4 className="text-lg font-bold text-ink">
                   {currentTestimonial.name}
                 </h4>
-                <p className="text-primary font-medium">
+                <p className="text-gold font-medium">
                   {currentTestimonial.position}
                 </p>
-                <p className="text-secondary text-sm">
+                <p className="text-ink-muted text-sm">
                   {currentTestimonial.company}
                 </p>
               </div>
@@ -100,14 +104,14 @@ const Testimonials: React.FC = () => {
             {/* Navigation Arrows */}
             <button
               onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors duration-200 p-2"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-muted hover:text-gold transition-colors duration-200 p-2"
               aria-label="Previous testimonial"
             >
               <ChevronLeft size={24} />
             </button>
             <button
               onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors duration-200 p-2"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-ink-muted hover:text-gold transition-colors duration-200 p-2"
               aria-label="Next testimonial"
             >
               <ChevronRight size={24} />
@@ -122,8 +126,8 @@ const Testimonials: React.FC = () => {
                 onClick={() => goToSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? "bg-primary scale-125"
-                    : "bg-gray-600 hover:bg-gray-500"
+                    ? "bg-gold scale-125"
+                    : "bg-ink-faint hover:bg-ink-muted"
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
                 aria-current={index === currentIndex ? "true" : undefined}
@@ -132,14 +136,15 @@ const Testimonials: React.FC = () => {
           </div>
 
           {/* All Testimonials Grid (Hidden on mobile) */}
-          <div className="hidden lg:grid lg:grid-cols-2 gap-6 mt-16">
+          <div
+            ref={gridRef}
+            className="hidden lg:grid lg:grid-cols-2 gap-6 mt-16"
+          >
             {testimonials.testimonials.map((t, index) => (
               <div
                 key={t.id}
-                className={`card p-6 cursor-pointer transition-all duration-300 ${
-                  index === currentIndex
-                    ? "border-primary bg-primary/50"
-                    : "hover:border-primary hover:border-primary/50"
+                className={`testimonial-tile glass-card p-6 cursor-pointer ${
+                  index === currentIndex ? "border-gold" : ""
                 }`}
                 onClick={() => goToSlide(index)}
               >
@@ -149,14 +154,14 @@ const Testimonials: React.FC = () => {
                     alt={t.name}
                     width={48}
                     height={48}
-                    className="rounded-full border-2 border-primary"
+                    className="rounded-full border-2 border-gold"
                   />
                   <div>
-                    <h5 className="font-bold text-white">{t.name}</h5>
-                    <p className="text-primary text-sm">{t.position}</p>
+                    <h5 className="font-bold text-ink">{t.name}</h5>
+                    <p className="text-gold text-sm">{t.position}</p>
                   </div>
                 </div>
-                <p className="text-secondary text-sm leading-relaxed">
+                <p className="text-ink-muted text-sm leading-relaxed">
                   {'"' + t.text.substring(0, 150) + '..."'}
                 </p>
                 <div className="flex mt-3">
@@ -164,7 +169,7 @@ const Testimonials: React.FC = () => {
                     <Star
                       key={i}
                       size={16}
-                      className="text-yellow-400 fill-current"
+                      className="text-gold fill-current"
                     />
                   ))}
                 </div>

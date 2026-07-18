@@ -26,7 +26,8 @@ const TypingAnimation: React.FC<TypingAnimationProps> = ({
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    // لو تغيرت الـ phrases رجع المؤشر من الأول
+    // Resets the typewriter state machine when the phrases prop changes
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIndex(0);
     setText("");
     setDeleting(false);
