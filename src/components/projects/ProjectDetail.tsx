@@ -226,6 +226,18 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
 
               {/* Action Buttons */}
               <div className="space-y-3">
+                {project.gameUrl && (
+                  <a
+                    href={project.gameUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-gold w-full flex items-center justify-center space-x-2"
+                  >
+                    <Play size={16} />
+                    <span>Play Game</span>
+                  </a>
+                )}
+
                 {project.scormUrl && (
                   <a
                     href={project.scormUrl}

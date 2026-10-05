@@ -1,6 +1,57 @@
 {
   "projects": [
     {
+      "id": 9,
+      "title": "Frog Balance: Math Adventure",
+      "category": "E-learning Development",
+      "thumbnail": "/projects/project_7/thumbnail.jpg",
+      "images": [
+        "/projects/project_7/cover_1.png",
+        "/projects/project_7/cover_2.png",
+        "/projects/project_7/cover_3.png",
+        "/projects/project_7/cover_4.png"
+      ],
+      "description": "A children's mathematics game inspired by a frog-balancing game popular on social media. I expanded the concept into a learning adventure with 6 stages and 48 levels, gradually increasing the difficulty and introducing varied counting, arithmetic, and balance challenges. I designed and developed the project independently in 6 hours, using ChatGPT and Claude to support development, ElevenLabs for sound effects and voice, and Canva for visuals and scenes.",
+      "features": [
+        "6 stages with 48 levels and progressively increasing difficulty.",
+        "Varied counting, arithmetic, and balance challenges.",
+        "A themed adventure map for navigating the stages.",
+        "Visual feedback that connects numbers with quantities.",
+        "Sound effects and voice to support the learning experience."
+      ],
+      "tools": ["ChatGPT", "Claude", "ElevenLabs", "Canva"],
+      "duration": "6 hours",
+      "team": "Solo project",
+      "videoUrl": "/projects/project_7/Video.mp4",
+      "gameUrl": "https://mohamedalaa1150.github.io/frog-balance/",
+      "files": []
+    },
+    {
+      "id": 8,
+      "title": "Draw and Measure: Grade 2 Math",
+      "category": "E-learning Development",
+      "thumbnail": "/projects/project_6/thumbnail.png",
+      "images": [
+        "/projects/project_6/cover_1.png",
+        "/projects/project_6/cover_2.png",
+        "/projects/project_6/cover_3.png"
+      ],
+      "description": "An interactive Grade 2 mathematics activity that helps children draw straight lines and measure lengths with a virtual ruler. I developed the game independently in 3 hours with assistance from Claude, creating Arabic and English versions while working at Selah ElTelmeez. My contribution was the game implementation, using the company's existing lesson content and visual design. All rights to this project and the supplied educational and visual materials are reserved by Selah ElTelmeez.",
+      "features": [
+        "Arabic and English versions for Grade 2 learners.",
+        "Interactive straight-line drawing with a virtual ruler.",
+        "Length activities using centimetres and millimetres.",
+        "Practice tasks with visual completion feedback.",
+        "Visual design aligned with Selah ElTelmeez lesson materials."
+      ],
+      "tools": ["Claude"],
+      "duration": "3 hours",
+      "team": "Solo project",
+      "videoUrl": "/projects/project_6/Video.mp4",
+      "gameUrl": "https://mohamedalaa1150.github.io/Math-Creation/",
+      "files": []
+    },
+    {
       "id": 1,
       "title": "First Aid on Tour",
       "category": "E-learning Development",
