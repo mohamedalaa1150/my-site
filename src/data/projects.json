@@ -36,7 +36,7 @@
         "/projects/project_6/cover_2.png",
         "/projects/project_6/cover_3.png"
       ],
-      "description": "An interactive Grade 2 mathematics activity that helps children draw straight lines and measure lengths with a virtual ruler. I developed the game independently in 3 hours with assistance from Claude, creating Arabic and English versions while working at Selah ElTelmeez. My contribution was the game implementation, using the company's existing lesson content and visual design. All rights to this project and the supplied educational and visual materials are reserved by Selah ElTelmeez. Screenshots and video are displayed with the company's permission.",
+      "description": "An interactive Grade 2 mathematics activity that helps children draw straight lines and measure lengths with a virtual ruler. I developed the game independently in 3 hours with assistance from Claude, creating Arabic and English versions while working at Selah ElTelmeez. My contribution was the game implementation, using the company's existing lesson content and visual design. All rights to this project and the supplied educational and visual materials are reserved by Selah ElTelmeez.",
       "features": [
         "Arabic and English versions for Grade 2 learners.",
         "Interactive straight-line drawing with a virtual ruler.",
