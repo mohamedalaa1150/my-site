@@ -4,11 +4,11 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Mohamed Alaa | Portfolio",
     short_name: "Mohamed Alaa",
-    description: "E-learning & Instructional Design Portfolio",
+    description: "Instructional design portfolio: learning games, interactive courses and storyboards",
     start_url: "/",
     display: "standalone",
-    background_color: "#09090F",
-    theme_color: "#09090F",
+    background_color: "#FBF5EA",
+    theme_color: "#FBF5EA",
     icons: [
       {
         src: "/icon",
